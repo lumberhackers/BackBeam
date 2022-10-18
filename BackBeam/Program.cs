@@ -1,5 +1,6 @@
 using BackBeam;
 using BackBeam.Hubs;
+using Microsoft.AspNetCore.Rewrite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,5 +42,9 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapHub<PhotoHub>("/photos");
+
+var rewriteOptions = new RewriteOptions()
+    .AddRewrite(@"^controller/\w+", "/", true);
+app.UseRewriter(rewriteOptions);
 
 app.Run();
