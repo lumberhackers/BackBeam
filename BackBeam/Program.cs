@@ -19,7 +19,7 @@ var app = builder.Build();
 // ALLOWED_ORIGINS="http://127.0.0.1:5173,https://127.0.0.1:5173,https://integration.example.com"
 app.UseCors(corsPolicyBuilder =>
 {
-    corsPolicyBuilder.WithOrigins(new[] { "http://127.0.0.1:5173", "https://127.0.0.1:5173" })
+    corsPolicyBuilder.WithOrigins("http://127.0.0.1:5173", "https://127.0.0.1:5173")
         .AllowAnyHeader()
         .WithMethods("GET", "POST")
         .AllowCredentials();
