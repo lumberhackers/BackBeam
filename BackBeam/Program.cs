@@ -43,8 +43,4 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapHub<PhotoHub>("/photos");
 
-var rewriteOptions = new RewriteOptions()
-    .AddRewrite(@"^controller/\w+", "/", true);
-app.UseRewriter(rewriteOptions);
-
 app.Run();
