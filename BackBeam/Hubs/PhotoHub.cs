@@ -8,7 +8,7 @@ public interface IPhotoClient
     /// Receive photo data in base64 format
     /// </summary>
     /// <param name="photoB64">Raw image data encoded in base64</param>
-    void ReceivePhoto(string photoB64);
+    Task ReceivePhoto(string photoB64);
 }
 
 public class PhotoHub : Hub<IPhotoClient>
@@ -30,7 +30,7 @@ public class PhotoHub : Hub<IPhotoClient>
     /// Host a session for controllers to send photos to
     /// </summary>
     /// <param name="sessionId">Unique session id to host</param>
-    void OpenSession(string sessionId)
+    public void OpenSession(string sessionId)
     {
         if (_sessionCollection.SessionHost(sessionId) != null)
             throw new Exception($"A host is already connected to session {sessionId}.");
@@ -42,7 +42,7 @@ public class PhotoHub : Hub<IPhotoClient>
     /// Control an existing photo session
     /// </summary>
     /// <param name="sessionId">Unique session id to control</param>
-    void ControlSession(string sessionId)
+    public void ControlSession(string sessionId)
     {
         var sessionHost = _sessionCollection.SessionHost(sessionId);
         if (sessionHost == null)
@@ -58,9 +58,9 @@ public class PhotoHub : Hub<IPhotoClient>
     /// Send a photo to the host of the connected photo session
     /// </summary>
     /// <param name="photoB64">Raw image data encoded in base64</param>
-    void SendPhoto(string photoB64)
+    public async Task SendPhoto(string photoB64)
     {
         var hostConnection = _sessionCollection.ControlledHost(Context.ConnectionId);
-        Clients.Client(hostConnection).ReceivePhoto(photoB64);
+        await Clients.Client(hostConnection).ReceivePhoto(photoB64);
     }
 }
