@@ -18,12 +18,15 @@ var app = builder.Build();
 
 // Configure CORS for SignalR
 // https://learn.microsoft.com/en-us/aspnet/core/signalr/security?view=aspnetcore-6.0#cross-origin-resource-sharing
-//
-// TODO: we need this to be configurable with an ENV var on launch
-// ALLOWED_ORIGINS="http://127.0.0.1:5173,https://127.0.0.1:5173,https://integration.example.com"
+// Example env: ALLOWED_ORIGINS="http://127.0.0.1:5173,https://127.0.0.1:5173,https://integration.example.com"
+var allowedOrigins = Environment.GetEnvironmentVariable("ALLOWED_ORIGINS")?.Split(",")
+    ?? new []{"http://127.0.0.1:5173", "https://127.0.0.1:5173", "https://beamphoto.pagekite.me"};
+
+Console.WriteLine(string.Join(";", allowedOrigins));
+
 app.UseCors(corsPolicyBuilder =>
 {
-    corsPolicyBuilder.WithOrigins("http://127.0.0.1:5173", "https://127.0.0.1:5173", "https://beamphoto.pagekite.me")
+    corsPolicyBuilder.WithOrigins(allowedOrigins)
         .AllowAnyHeader()
         .WithMethods("GET", "POST")
         .AllowCredentials();
