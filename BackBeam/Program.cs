@@ -7,7 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<ISessionCollection, SessionCollection>();
 builder.Services.AddRazorPages();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(hubOptions =>
+{
+    hubOptions.MaximumReceiveMessageSize = 1024 * 1024 * 10;
+});
+
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -19,7 +23,7 @@ var app = builder.Build();
 // ALLOWED_ORIGINS="http://127.0.0.1:5173,https://127.0.0.1:5173,https://integration.example.com"
 app.UseCors(corsPolicyBuilder =>
 {
-    corsPolicyBuilder.WithOrigins("http://127.0.0.1:5173", "https://127.0.0.1:5173")
+    corsPolicyBuilder.WithOrigins("http://127.0.0.1:5173", "https://127.0.0.1:5173", "https://beamphoto.pagekite.me")
         .AllowAnyHeader()
         .WithMethods("GET", "POST")
         .AllowCredentials();
